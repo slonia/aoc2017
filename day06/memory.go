@@ -10,6 +10,7 @@ import (
 var maxInBlock int = -1
 var maxBlock int = -1
 var numbers []int = []int{}
+var keys []string = []string{}
 
 func main() {
 	file, _ := os.Open("input.txt")
@@ -28,20 +29,32 @@ func main() {
 	}
 	set := map[string]bool{}
 	key := arrayToStr()
+	keys = append(keys, key)
 	set[key] = true
 	steps := 1
 	for {
 		rearrange()
 		key = arrayToStr()
+		// fmt.Println(key)
 		_, ok := set[key]
 		if ok {
 			break
 		} else {
+			keys = append(keys, key)
 			set[key] = true
 			steps++
 		}
 	}
+	// answer for part#1
 	fmt.Println(steps)
+	for i, k := range keys {
+		if k == key {
+			// answer for part#2
+			fmt.Println(len(keys) - i)
+			break
+		}
+		i++
+	}
 }
 func rearrange() {
 	numbers[maxInBlock] = 0
