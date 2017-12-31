@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	const list_size int = 255
+	const list_size int = 256
 	list := make([]int, list_size, list_size)
 	for i, _ := range list {
 		list[i] = i
