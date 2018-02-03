@@ -9,7 +9,7 @@ import (
 )
 
 var field [][]string
-var szX, szY, curX, curY, prevX, prevY int
+var szX, szY, curX, curY, prevX, prevY, steps int
 var path []string = make([]string, 0)
 var direction string
 
@@ -46,6 +46,7 @@ func main() {
 		// time.Sleep(400 * time.Millisecond)
 	}
 	fmt.Println(path)
+	fmt.Println(steps)
 }
 
 func printField() {
@@ -65,24 +66,28 @@ func printField() {
 func moveUp() {
 	if curY > 0 {
 		curY--
+		steps++
 	}
 }
 
 func moveDown() {
 	if curY < szY-1 {
 		curY++
+		steps++
 	}
 }
 
 func moveRight() {
 	if curX < szX-1 {
 		curX++
+		steps++
 	}
 }
 
 func moveLeft() {
 	if curX > 0 {
 		curX--
+		steps++
 	}
 }
 
