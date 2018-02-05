@@ -16,9 +16,9 @@ type Coords struct {
 }
 
 type Particle struct {
-	point    Coords
-	speed    Coords
-	velocity Coords
+	point       Coords
+	velocity    Coords
+	aceleration Coords
 }
 
 var particles []Particle
@@ -40,10 +40,9 @@ func findMin() {
 	var minDist float64
 	for i, particle := range particles {
 		point := math.Sqrt(float64(particle.point.x*particle.point.x + particle.point.y*particle.point.y + particle.point.z*particle.point.z))
-		speed := math.Sqrt(float64(particle.point.x*particle.point.x + particle.point.y*particle.point.y + particle.point.z*particle.point.z))
-		velocity := math.Sqrt(float64(particle.point.x*particle.point.x + particle.point.y*particle.point.y + particle.point.z*particle.point.z))
-		dist := math.Abs(point + speed*bigNumber + velocity*bigNumber*bigNumber/2)
-		fmt.Printf("%v, %f\n", i, dist)
+		velocity := math.Sqrt(float64(particle.velocity.x*particle.velocity.x + particle.velocity.y*particle.velocity.y + particle.velocity.z*particle.velocity.z))
+		aceleration := math.Sqrt(float64(particle.aceleration.x*particle.aceleration.x + particle.aceleration.y*particle.aceleration.y + particle.aceleration.z*particle.aceleration.z))
+		dist := math.Abs(point + velocity*bigNumber + aceleration*bigNumber*bigNumber/2)
 		if minInd == -1 || dist < minDist {
 			minInd = i
 			minDist = dist
