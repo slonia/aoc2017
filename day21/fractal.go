@@ -2,9 +2,9 @@ package main
 
 import (
 	"bufio"
+	"errors"
 	"os"
 	"strings"
-	"fmt"
 )
 
 type Rule struct {
@@ -48,26 +48,68 @@ func expand() {
 		newStr := strings.Join(str, "")
 		newField = append(newField, newStr)
 	}
-	for i:=0; i < curLen/step; i++ {
+	for i := 0; i < curLen/step; i++ {
 		square := make([]string, 0)
-		for j:=0; j < step; j++ {
+		for j := 0; j < step; j++ {
 			square = append(square, field[j][(step*i):(step*(i+1))])
 		}
-		rule := findRule(square)
-	}
-}
+		rule, err := findRule(square)
+		if err == nil {
+			for _, newRow := range rule.to {
 
-func findRule(square []string) Rule {
-	ln := len(square)
-	for _, rule := range rules {
-		for steps := 0; steps < 4; steps++ {
-			square = rotate(square)
+			}
 		}
 	}
 }
 
-func rotate(square []string) []string {
+func findRule(square []string) (Rule, error) {
+	for _, permutaion := range permute(square) {
+		for _, rule := range rules {
+			match := true
+			for i, rows := range permutaion {
+				if rows != rule.from[i] {
+					match = false
+					break
+				}
+			}
+			if match {
+				return rule, nil
+			}
+		}
+	}
+	return Rule{square, square}, errors.New("Cannot match")
+}
+
+func permute(square []string) [][]string {
+	permutations := make([][]string, 0)
 	ln := len(square)
-	newSquare = make([]string, ln)
-	return square
+	for rot := 0; rot < 4; rot++ {
+		newSquare := make([]string, ln)
+		for i := 0; i < ln; i++ {
+			str := make([]string, 0)
+			for j := ln - 1; j > -1; j-- {
+				str = append(str, string(square[j][i]))
+			}
+			newSquare[i] = strings.Join(str, "")
+		}
+		square = newSquare
+		permutations = append(permutations, square)
+		horFlip := make([]string, ln)
+		verFlip := make([]string, ln)
+		for i := 0; i < ln; i++ {
+			horFlip[i] = reverse(square[i])
+			verFlip[ln-1-i] = square[i]
+		}
+		permutations = append(permutations, horFlip)
+		permutations = append(permutations, verFlip)
+	}
+	return permutations
+}
+
+func reverse(str string) string {
+	newStr := ""
+	for i := len(str) - 1; i > -1; i-- {
+		newStr = newStr + string(str[i])
+	}
+	return newStr
 }
